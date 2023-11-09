@@ -22,7 +22,7 @@ const App = () => {
       </AppBar> 
       <Grow in> 
         <Container>
-          <Grid container justifyContent="space-between" alignItems="stretch" spacing={3}>
+          <Grid container className={classes.mainContainer} justifyContent="space-between" alignItems="stretch" spacing={3}>
            <Grid item xs={12} sm={7} >  
            {/* // on a passe le setCurrentId pour le passe au enfant Post et pour le puisse modifier set state */}
             <Posts setCurrentId={setCurrentId} />
