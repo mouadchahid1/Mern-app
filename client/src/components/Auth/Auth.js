@@ -33,8 +33,7 @@ const Auth = () => {
     } 
     const googleOnSuccess = async (response) => { 
       
-      const result = jwt_decode(response?.credential) ;
-      console.log(result)
+      const result = jwt_decode(response?.credential);
       try {
         dispatch({type :AUTH, data:{result}}) ;
         navigate("/");

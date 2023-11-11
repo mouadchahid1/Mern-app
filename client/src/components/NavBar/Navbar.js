@@ -2,22 +2,27 @@ import { AppBar, Avatar, Button, Toolbar, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react'; 
 import memories from "../../images/memories.jpeg"; 
 import useStyles  from "./styles";
-import { Link }  from "react-router-dom";
+import { Link, useLocation, useNavigate }  from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { LOGOUT } from '../../constants/actionType';
 
 
 
-const Navbar = () => { 
+const Navbar = () => {  
+  const navigate = useNavigate() ; 
+  const dispatch = useDispatch() ;
     const classes = useStyles() ;  
-    const [user , setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+    const [user , setUser] = useState(JSON.parse(localStorage.getItem("profile"))); 
+    const location = useLocation() ;
     useEffect(()=>{ 
   
      setUser(JSON.parse(localStorage.getItem("profile")));
-    },[]); 
-const googleLogout = () => {
+    },[location]); 
+const googleLogout = () => { 
+  dispatch({type : LOGOUT});
       setUser(null); 
-      localStorage.removeItem("profile") ; 
-      
-      
+        
+      navigate("/")
   }
   return (
     <AppBar className={classes.appBar}  position="static" color="inherit" >
@@ -29,7 +34,7 @@ const googleLogout = () => {
   {
     user ? ( 
         <div className={classes.profile}> 
-         <Avatar className={classes.purple} alt={user.result.name} src={user.result.picture}> 
+                  <Avatar className={classes.purple} alt={user.result.name} image={user.result.picture}> 
              {user.result.name.charAt(0)}</Avatar> 
         <Typography variant="h6" className={classes.userName} > {user.result.name}</Typography>
         <Button variant='contained' className={classes.logout} color="secondary"  onClick={googleLogout} >Log out</Button>
