@@ -2,11 +2,20 @@ import { Avatar, Button, Container, Grid, Paper, Typography } from '@material-ui
 import React, { useState } from 'react' ;  
 import useStyles from "./styles";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined"
-import Input from './Input';
-const Auth = () => { 
+import Input from './Input'; 
+import { GoogleOAuthProvider , GoogleLogin, googleLogout } from '@react-oauth/google';  
+import { useDispatch  } from 'react-redux';
+import { AUTH } from '../../constants/actionType'; 
+import jwt_decode from "jwt-decode" ; 
+import { useNavigate } from 'react-router-dom';
+ 
+ 
+ 
+const Auth = () => {  
+   const navigate = useNavigate() ;
     const classes  = useStyles() ;  
     const [showPassword,setShowPassword] = useState(false);
-     
+     const dispatch = useDispatch() ;
     const [isSignup , setisSignup] = useState(false);
     const handlerSubmit = () => 
     { 
@@ -21,7 +30,24 @@ const Auth = () => {
     const switchedMode = () => { 
         setisSignup((prevValue)=> !prevValue); 
         setShowPassword(false);
+    } 
+    const googleOnSuccess = async (response) => { 
+      
+      const result = jwt_decode(response?.credential) ;
+      console.log(result)
+      try {
+        dispatch({type :AUTH, data:{result}}) ;
+        navigate("/");
+      } catch (error) {
+        console.log(error)
+      } 
+
     }
+    const googleOnError = () => {
+      console.log("connexion faild");
+    }
+    
+ 
   return (
     <Container  maxWidth="xs" component="main">
       <Paper  className={classes.paper} elevation={3}> 
@@ -52,6 +78,15 @@ const Auth = () => {
           <Button type='button' fullWidth color='primary' variant="contained" className={classes.submit}> 
          { isSignup ? "Sign Up" : " Sign in" }
           </Button> 
+          <GoogleOAuthProvider clientId='601777867599-tmap4j09gtbsls55p6cc6r359ohb7408.apps.googleusercontent.com' >
+   
+  <GoogleLogin  width="362px"
+  onSuccess={googleOnSuccess}
+  onError={googleOnError}
+/>
+ 
+          </GoogleOAuthProvider> 
+           
           <Grid container justifyContent='flex-end' >
             <Grid item> 
              <Button onClick={switchedMode} >
