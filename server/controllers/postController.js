@@ -41,12 +41,22 @@ export const deletePost =  async (req,res) => {
      res.json({message : "the post et supprimer succefuly "}) ;
 } 
 export const likePost = async (req,res) => {  
+      
+      if(!req.UserId) return res.status(403).json({message : "your are not authozite"}) ;
       const {id} = req.params ; 
+
        if(!mongoose.Types.ObjectId.isValid(id)) 
        { 
-            res.status(404).send("Post Not Found");
+          return   res.status(404).send("Post Not Found");
        } 
        const post = await PostMessage.findById(id) ;  
-       const newPost = await PostMessage.findByIdAndUpdate(id,{likeCount : post.likeCount + 1},{new : true}) ; 
+       const index = post.likes.findIndex((id)=> id === String(req.userId)); 
+       if(index === -1) {
+            post.likes.push(String(req.userId));
+       } 
+       else {
+            post.likes = post.likes.filter((id)=> id !== String(req.userId));
+       }
+       const newPost = await PostMessage.findByIdAndUpdate(id,post,{new : true}) ; 
        res.json(newPost);
 }

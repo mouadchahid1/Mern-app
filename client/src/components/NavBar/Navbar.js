@@ -34,13 +34,13 @@ const googleLogout = () => {
   {
     user ? ( 
         <div className={classes.profile}> 
-                  <Avatar className={classes.purple} alt={user.result.name} image={user.result.picture}> 
+                  <Avatar className={classes.purple} alt={user.result.name} src={user.result.picture}> 
              {user.result.name.charAt(0)}</Avatar> 
         <Typography variant="h6" className={classes.userName} > {user.result.name}</Typography>
         <Button variant='contained' className={classes.logout} color="secondary"  onClick={googleLogout} >Log out</Button>
         </div>
     ) 
-    : ( 
+    :( 
      <Button component={Link} to="/auth" color="primary" variant="contained" >Sign in</Button>
     )
  } 
