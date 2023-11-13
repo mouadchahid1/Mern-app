@@ -12,8 +12,9 @@ export const getPost = async (req,res) => {
 export const createPost  = async (req,res) => { 
      try 
       { 
-      const post = req.body ;  
-      const newPost = new PostMessage(post)  ; 
+        const post = req.body ;   
+
+      const newPost = new PostMessage({...post , creator : req.UserId })  ; 
       await newPost.save() ; 
       res.status(200).json(newPost) ; 
       } 
@@ -41,7 +42,7 @@ export const deletePost =  async (req,res) => {
      res.json({message : "the post et supprimer succefuly "}) ;
 } 
 export const likePost = async (req,res) => {  
-      
+       
       if(!req.UserId) return res.status(403).json({message : "your are not authozite"}) ;
       const {id} = req.params ; 
 
@@ -50,12 +51,12 @@ export const likePost = async (req,res) => {
           return   res.status(404).send("Post Not Found");
        } 
        const post = await PostMessage.findById(id) ;  
-       const index = post.likes.findIndex((id)=> id === String(req.userId)); 
+       const index = post.likes.findIndex((id)=> id === String(req.UserId)); 
        if(index === -1) {
-            post.likes.push(String(req.userId));
+            post.likes.push(req.UserId);
        } 
        else {
-            post.likes = post.likes.filter((id)=> id !== String(req.userId));
+            post.likes = post.likes.filter((id)=> id !== String(req.UserId));
        }
        const newPost = await PostMessage.findByIdAndUpdate(id,post,{new : true}) ; 
        res.json(newPost);

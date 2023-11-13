@@ -7,8 +7,9 @@ import { createPost , updatePost} from '../../actions/posts';
  
 const Form = ({currentId , setCurrentId}) => { 
   const [postData , setPostData] = useState({
-    title : "" , creator : "", message : "", selectedFile: "" , tags :""
+    title : "", message : "", selectedFile: "" , tags :""
   }); 
+  const user = JSON.parse(localStorage.getItem("profile"));
 const post = useSelector((state) => currentId ? state.posts.find((p)=> p._id === currentId) : null);
   const dispatch = useDispatch();
     const classes = useStyles() ;  
@@ -20,10 +21,10 @@ const post = useSelector((state) => currentId ? state.posts.find((p)=> p._id ===
     const handleSubmit = (e) => { 
      e.preventDefault() ;  
      if(currentId) {
-      dispatch(updatePost(currentId,postData)) ;  
+      dispatch(updatePost(currentId,{...postData , name : user?.result?.name })) ;  
      } 
      else {
-       dispatch(createPost(postData));
+       dispatch(createPost({...postData , name : user?.result?.name }));
      } 
      clear() ; 
     } 
@@ -31,24 +32,23 @@ const post = useSelector((state) => currentId ? state.posts.find((p)=> p._id ===
       setCurrentId(null);
       setPostData({
         title: "",
-        creator: "",
         message: "",
         selectedFile: "",
         tags: "",
       })
+    } 
+    if(!user) {
+      return ( 
+         <Paper className={classes.paper}>
+          <Typography variant="h6">Please login for create memories and likes post</Typography>
+         </Paper>
+      )
     }
   return ( 
 
     <Paper className={`${classes.root} ${classes.paper}`}>
       <form autoComplete='off' noValidate className={classes.form} onSubmit={handleSubmit} >
         <Typography  variant='h6'>{ currentId ? "Edit" : "Create"} Memory</Typography>  
-          <TextField name='creator' 
-           label="Creator" 
-           variant="outlined"  
-           fullWidth
-           value={postData.creator} 
-           onChange={(e)=> setPostData({...postData , creator : e.target.value}) }
-          /> 
             <TextField name='title' 
            label="Title" 
            variant="outlined"  
