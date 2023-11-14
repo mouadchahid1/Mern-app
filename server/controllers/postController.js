@@ -1,11 +1,19 @@
 import mongoose from "mongoose"
 import PostMessage from "../Model/PostMessage.js"
  
-export const getPost = async (req,res) => {
+export const getPost = async (req,res) => { 
+     const {page} = req.query ;
       try 
-      {
-      const postMessage  = await PostMessage.find() 
-      res.status(200).json(postMessage)
+      { 
+          
+          const limit = 8 ; 
+          const startIndex = (Number(page) - 1) *8 ;  // le post ou va comment la deuxieme pagination 
+           const total = await PostMessage.countDocuments({}) ; 
+
+      const posts  = await PostMessage.find().sort({_id : -1}).limit(limit).skip(startIndex); 
+
+      res.status(200).json({data : posts , currentPage : Number(page) , NumberOfPages : Math.ceil(total / limit)}); 
+
       } catch (error) {
       res.status(404).json({message : error.message})
       } 

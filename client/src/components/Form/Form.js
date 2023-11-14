@@ -46,7 +46,7 @@ const post = useSelector((state) => currentId ? state.posts.find((p)=> p._id ===
     }
   return ( 
 
-    <Paper className={`${classes.root} ${classes.paper}`}>
+    <Paper className={`${classes.root} ${classes.paper}`} elevation={6}>
       <form autoComplete='off' noValidate className={classes.form} onSubmit={handleSubmit} >
         <Typography  variant='h6'>{ currentId ? "Edit" : "Create"} Memory</Typography>  
             <TextField name='title' 

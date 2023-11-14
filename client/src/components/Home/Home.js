@@ -1,7 +1,7 @@
 import { Container, Grid, Grow, Paper ,Button,AppBar,TextField} from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { getPostBySearch, getPosts } from '../../actions/posts';
-import { useDispatch } from 'react-redux'; 
+import { useDispatch  } from 'react-redux'; 
 import useStyles from "./styles"; 
 import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
@@ -49,10 +49,7 @@ const Home = () => {
     
 
    
-    useEffect(() => {
-      dispatch(getPosts()); 
-    },[dispatch,tags]);
-
+ 
   return (
     <Grow in> 
     <Container maxWidth="xl">
@@ -64,7 +61,7 @@ const Home = () => {
        <Grid item xs={12} sm={6} md={3}> 
        <AppBar className={classes.appBarSearch} position='static' color='inherit' > 
          <TextField  name="search"  
-         label="Search Memories" variant='outlined' fullWidth value={search} onKeyPress={handleKeyDown}
+         label="Search Memories" variant='outlined' fullWidth value={search} onKeyDown={handleKeyDown}
           onChange={(e)=>setSearch(e.target.value)}  />
           <ChipInput style={{margin : "10px 0"}}  
           value={tags}
@@ -77,10 +74,14 @@ const Home = () => {
           <Button onClick={searchPost}  color='primary' variant="contained" className={classes.searchButton} >Search</Button>
        </AppBar>
         {/* passe le current id pour modifier de h1 de formlaire et passe set current id pour le change  */}
-        <Form currentId ={currentId} setCurrentId={setCurrentId}  />
-        <Paper elevation={6}>
-          <Pagination />
-        </Paper>
+        <Form currentId ={currentId} setCurrentId={setCurrentId}  />     
+          {
+            (!searchQuery || !tags.length) && ( 
+              <Paper elevation={6}>
+              <Pagination className={classes.pagination} page={page} />
+              </Paper>
+            )
+          }     
        </Grid>
       </Grid>
     </Container>
