@@ -10,7 +10,9 @@ API.interceptors.request.use((req)=> {
      return req ;
 }) 
 
-export const fetchPosts =  () => API.get("/posts") ;
+export const fetchPosts =  () => API.get("/posts") ; 
+
+export const fetchPostsBySearch = (searchQuery) =>  API.get(`/posts/search?searchQuery=${searchQuery.search || "none"}&tags=${searchQuery.tags}`);
 
 export const createPost = (postData) => API.post("/posts",postData) ; 
 
@@ -23,3 +25,4 @@ export const likePost = (id) => API.patch(`/posts/${id}/likePost`) ;
 export const signIn  = (formData) => API.post("/auth/signin",formData); 
 
 export const signUp = (formData) => API.post("/auth/signup",formData);
+

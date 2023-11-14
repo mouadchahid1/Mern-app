@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import PostMessage from "../Model/PostMessage.js"
+ 
 export const getPost = async (req,res) => {
       try 
       {
@@ -8,7 +9,23 @@ export const getPost = async (req,res) => {
       } catch (error) {
       res.status(404).json({message : error.message})
       } 
+} 
+ 
+export const getPostBySearch =async(req,res) => { 
+    try {
+       const {searchQuery,tags} = req.query ; 
+
+       const title = new RegExp(searchQuery,"i") ; 
+
+       const posts = await PostMessage.find({$or : [{title} , {tags : { $in : tags.split(",")}}]}); 
+
+       res.json({data : posts}) ;
+
+    } catch (error) {
+     res.status(404).json({message : error.message})
+    }
 }
+
 export const createPost  = async (req,res) => { 
      try 
       { 

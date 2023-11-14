@@ -15,7 +15,7 @@ const post = useSelector((state) => currentId ? state.posts.find((p)=> p._id ===
     const classes = useStyles() ;  
     useEffect(()=> {
        if(post) setPostData(post) ; 
-       console.log(post) ;
+  
     },[post]);
 
     const handleSubmit = (e) => { 
