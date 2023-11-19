@@ -8,7 +8,8 @@ API.interceptors.request.use((req)=> {
         req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem("profile")).token}`;
      } 
      return req ;
-}) 
+}) ; 
+export const getPost = (id) => API.get(`/posts/${id}`) ;
 
 export const fetchPosts =  (page) => API.get(`/posts?page=${page}`) ; 
 

@@ -1,8 +1,8 @@
-import { FETCH_ALL , CREATE , DELETE ,LIKE , UPDATE, FETCH_BY_SEARCH, START_LOADING, END_LOADING } from "../constants/actionType";
+import { FETCH_ALL , CREATE , DELETE ,LIKE , UPDATE, FETCH_BY_SEARCH, START_LOADING, END_LOADING, FETCH_POST } from "../constants/actionType";
  const posts = (state = {isLoading :true ,posts : [] ,NumberOfPages : 1}, action) => {
     switch (action.type) {  
-      case CREATE:
-       return [...posts , action.payload] ;
+      case CREATE: 
+       return {...state , posts : [...state.posts ,action.payload]}
        case START_LOADING:
         return {...state , isLoading : true}  ;
         case END_LOADING:
@@ -14,7 +14,9 @@ import { FETCH_ALL , CREATE , DELETE ,LIKE , UPDATE, FETCH_BY_SEARCH, START_LOAD
           NumberOfPages : action.payload.NumberOfPages ,
         } ;
         case FETCH_BY_SEARCH : 
-        return {...state , posts:action.payload} ;
+        return {...state , posts:action.payload} ; 
+        case FETCH_POST : 
+        return {...state , post : action.payload};
        case UPDATE:  
        return {...state,posts:state.posts.map(post=> post._id ===  action.payload._id ? action.payload : post)}; 
        case LIKE :
