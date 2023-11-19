@@ -1,6 +1,6 @@
 import { Container, Grid, Grow, Paper ,Button,AppBar,TextField} from '@material-ui/core'
-import React, { useEffect, useState } from 'react'
-import { getPostBySearch, getPosts } from '../../actions/posts';
+import React, {   useState } from 'react'
+import { getPostBySearch } from '../../actions/posts';
 import { useDispatch  } from 'react-redux'; 
 import useStyles from "./styles"; 
 import Posts from '../Posts/Posts';
@@ -24,7 +24,7 @@ const Home = () => {
     const [tags , setTags] = useState([]) ;
     const searchPost = () => {
       if(search.trim() || tags.length > 0) {
-
+          console.log(search);
         console.log(tags) ;
         dispatch(getPostBySearch({search ,tags :tags.join(",")}));
       } 

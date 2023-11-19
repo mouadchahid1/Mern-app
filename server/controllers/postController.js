@@ -17,18 +17,6 @@ export const getPosts = async (req,res) => {
       res.status(404).json({message : error.message})
       } 
 }  
-export const getPost = async (req,res) => { 
-     const {id} = req.params; 
-     try {
-           
-           const post = await PostMessage.findById(id) ; 
-           res.status(200).json(post) ;
-     }  
-     catch (error) {
-       res.status(404).json({message : "post not found "});   
-     }
-}
- 
 export const getPostBySearch =async(req,res) => { 
     try {
        const {searchQuery,tags} = req.query ; 
@@ -95,4 +83,29 @@ export const likePost = async (req,res) => {
        }
        const newPost = await PostMessage.findByIdAndUpdate(id,post,{new : true}) ; 
        res.json(newPost);
+}
+export const getPost = async (req,res) => { 
+     const {id} = req.params; 
+     try {
+           const post = await PostMessage.findById(id) ; 
+           res.status(200).json(post) ;
+     }  
+     catch (error) {
+       res.status(404).json({message :error});   
+     }
+}
+ 
+export const commentPost = async(req,res) => {  
+     const {id} = req.params ;
+     const {value} = req.body ;
+      try { 
+      const post = await PostMessage.findById(id) ;   
+      post.comments.push(value) ; 
+      const updatePost  = await PostMessage.findByIdAndUpdate(id,post,{new : true }) ; 
+      res.status(200).json(updatePost) ;
+
+          
+      } catch (error) {
+          res.status(404).json({message : "faild to write comment"});
+      }
 }

@@ -23,12 +23,14 @@ const Post = ({post, setCurrentId}) => {
   return ( 
     
     <Card className={classes.card}  raised elevation={6} > 
-     <ButtonBase className={classes.cardActions} onClick={openPost}>  
+    
     <CardMedia className={classes.media} image={post.selectedFile} title={post.title} /> 
-    </ButtonBase>
+ 
     <div className={classes.overlay}> 
+     <ButtonBase className={classes.cardActions} onClick={openPost}>  
      <Typography variant='h6' >{post.name}</Typography>
      <Typography variant="body2" >{moment(post.createdAt).fromNow()}</Typography>
+     </ButtonBase>
     </div> 
     <div className={classes.overlay2}> 
      {(user?.result?.sub === post.creator || user?.result?._id === post.creator) && ( 

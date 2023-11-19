@@ -3,15 +3,17 @@ import useStyles from "./styles";
 import { Paper,Button,Typography , TextField } from '@material-ui/core'; 
 import FileBase from "react-file-base64"
 import { useDispatch, useSelector } from 'react-redux';
-import { createPost , updatePost} from '../../actions/posts';
+import { createPost , updatePost} from '../../actions/posts'; 
+import {useNavigate} from "react-router-dom"
  
 const Form = ({currentId , setCurrentId}) => { 
   const [postData , setPostData] = useState({
     title : "", message : "", selectedFile: "" , tags :""
   }); 
   const user = JSON.parse(localStorage.getItem("profile"));
-const post = useSelector((state) => currentId ? state.posts.find((p)=> p._id === currentId) : null);
-  const dispatch = useDispatch();
+const post = useSelector((state) => currentId ? state.posts.posts.find((p)=> p._id === currentId) : null);
+  const dispatch = useDispatch(); 
+  const navigate = useNavigate()
     const classes = useStyles() ;  
     useEffect(()=> {
        if(post) setPostData(post) ; 
@@ -24,7 +26,7 @@ const post = useSelector((state) => currentId ? state.posts.find((p)=> p._id ===
       dispatch(updatePost(currentId,{...postData , name : user?.result?.name })) ;  
      } 
      else {
-       dispatch(createPost({...postData , name : user?.result?.name }));
+       dispatch(createPost({...postData , name : user?.result?.name },navigate));
      } 
      clear() ; 
     } 
